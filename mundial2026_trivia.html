@@ -53,6 +53,24 @@
     margin-bottom: 4px;
   }
 
+
+  .main-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    direction: ltr;
+  }
+
+  .main-title span:first-child {
+    direction: rtl;
+  }
+
+  .ball {
+    font-size: 30px;
+    line-height: 1;
+  }
+
   .header p {
     font-size: 14px;
     color: var(--text-secondary);
@@ -257,7 +275,10 @@
 <div class="container">
   <div id="game-view">
     <div class="header">
-      <h1>⚽ טריוויה מונדיאל 2026</h1>
+      <h1 class="main-title">
+        <span>טריוויה מונדיאל 2026</span>
+        <span class="ball">⚽</span>
+      </h1>
       <p>כמה אתם יודעים על המונדיאל הקרוב?</p>
     </div>
 
@@ -290,8 +311,8 @@
   <div class="result-screen" id="locked-screen">
     <div class="result-emoji">✅</div>
     <div class="result-score">כבר עניתם על השאלון</div>
-    <div class="result-label">ניתן לענות פעם אחת בלבד מהמכשיר/הדפדפן הזה.</div>
-    <div class="result-msg">תודה על ההשתתפות! אם יש צורך באיפוס, פנו למנהל/ת המערכת.</div>
+    <div class="result-label">ניתן לענות פעם אחת בלבד.</div>
+    <div class="result-msg">תודה על ההשתתפות!.</div>
   </div>
 </div>
 
