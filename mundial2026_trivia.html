@@ -8,20 +8,20 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --bg: #f5f4f0;
+    --bg: #F3F8FB;
     --surface: #ffffff;
-    --border: rgba(0,0,0,0.12);
-    --border-hover: rgba(0,0,0,0.25);
-    --text-primary: #1a1a18;
-    --text-secondary: #5f5e5a;
-    --text-hint: #888780;
+    --border: rgba(57,126,159,0.22);
+    --border-hover: rgba(57,126,159,0.45);
+    --text-primary: #123247;
+    --text-secondary: #4F6F82;
+    --text-hint: #7895A6;
     --green-fill: #E1F5EE;
     --green-border: #1D9E75;
     --green-text: #085041;
     --red-fill: #FCEBEB;
     --red-border: #E24B4A;
     --red-text: #501313;
-    --accent: #1D9E75;
+    --accent: #397E9F;
     --radius-md: 8px;
     --radius-lg: 12px;
   }
@@ -140,7 +140,7 @@
   }
 
   .answer-btn:hover:not(:disabled) {
-    background: #f5f4f0;
+    background: #EAF4F8;
     border-color: var(--border-hover);
   }
 
@@ -198,7 +198,7 @@
     transition: background 0.15s;
   }
 
-  .next-btn:hover { background: #f5f4f0; }
+  .next-btn:hover { background: #EAF4F8; }
 
   .result-screen {
     display: none;
@@ -245,7 +245,7 @@
     transition: background 0.15s;
   }
 
-  .restart-btn:hover { background: #ece9e0; }
+  .restart-btn:hover { background: #EAF4F8; }
 
   @media (max-width: 480px) {
     body { padding: 1rem 0.75rem; }
@@ -257,8 +257,8 @@
 <div class="container">
   <div id="game-view">
     <div class="header">
-      <h1>⚽ טריווה מונדיאל 2026</h1>
-      <p>כמה אתה יודע על המונדיאל הקרוב?</p>
+      <h1>⚽ טריוויה מונדיאל 2026</h1>
+      <p>כמה אתם יודעים על המונדיאל הקרוב?</p>
     </div>
 
     <div class="progress-bar">
@@ -285,7 +285,13 @@
     <div class="result-score" id="result-score"></div>
     <div class="result-label" id="result-label"></div>
     <div class="result-msg" id="result-msg"></div>
-    <button class="restart-btn" onclick="startGame()">שחק שוב</button>
+  </div>
+
+  <div class="result-screen" id="locked-screen">
+    <div class="result-emoji">✅</div>
+    <div class="result-score">כבר עניתם על השאלון</div>
+    <div class="result-label">ניתן לענות פעם אחת בלבד מהמכשיר/הדפדפן הזה.</div>
+    <div class="result-msg">תודה על ההשתתפות! אם יש צורך באיפוס, פנו למנהל/ת המערכת.</div>
   </div>
 </div>
 
@@ -334,10 +340,10 @@ const questions = [
     fact: "מירוסלב קלוזה מגרמניה הוא שיאן הבקעות במונדיאל עם 16 שערים."
   },
   {
-    q: "מתי צפוי להיפתח מונדיאל 2026?",
-    answers: ["יוני 2026", "מאי 2026", "יולי 2026", "אוגוסט 2026"],
+    q: "איזו נבחרת תפגוש מקסיקו במשחק הפתיחה של מונדיאל 2026?",
+    answers: ["דרום אפריקה", "קנדה", "ארה״ב", "ארגנטינה"],
     correct: 0,
-    fact: "המונדיאל צפוי לנפתח ביוני 2026, עם המשחקים הראשונים בקנדה ובמקסיקו."
+    fact: "משחק הפתיחה יתקיים ב-11 ביוני 2026: מקסיקו נגד דרום אפריקה."
   },
   {
     q: "כמה אצטדיונים יארחו משחקי מונדיאל 2026 בסך הכול?",
@@ -346,19 +352,28 @@ const questions = [
     fact: "16 עיר ו-16 אצטדיון יארחו משחקים – 11 בארה״ב, 3 במקסיקו ו-2 בקנדה."
   },
   {
-    q: "מה הכינוי של נבחרת ישראל בכדורגל?",
-    answers: ["האריות", "הצוברים", "הנשרים", "הכוכבים הכחולים"],
-    correct: 1,
-    fact: "נבחרת ישראל מכונה \"הצוברים\" – על שם הצמח הצבר, סמל של ישראלי ששורשיו בארץ."
+    q: "מתי ישראל השתתפה במונדיאל בפעם האחרונה?",
+    answers: ["1970", "1966", "1982", "1994"],
+    correct: 0,
+    fact: "ישראל השתתפה במונדיאל פעם אחת בלבד, במקסיקו 1970."
   }
 ];
 
 let current = 0, score = 0, answered = false;
+const STORAGE_KEY = 'mundial2026_trivia_completed';
 
 function startGame() {
+  if (localStorage.getItem(STORAGE_KEY) === 'true') {
+    document.getElementById('game-view').style.display = 'none';
+    document.getElementById('result-screen').style.display = 'none';
+    document.getElementById('locked-screen').style.display = 'block';
+    return;
+  }
+
   current = 0; score = 0; answered = false;
   document.getElementById('game-view').style.display = 'block';
   document.getElementById('result-screen').style.display = 'none';
+  document.getElementById('locked-screen').style.display = 'none';
   showQuestion();
 }
 
@@ -419,6 +434,7 @@ document.getElementById('next-btn').onclick = function() {
 };
 
 function showResult() {
+  localStorage.setItem(STORAGE_KEY, 'true');
   document.getElementById('game-view').style.display = 'none';
   document.getElementById('result-screen').style.display = 'block';
   document.getElementById('progress').style.width = '100%';
