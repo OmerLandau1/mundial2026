@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>טריווה מונדיאל 2026</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f5f4f0;
+    --surface: #ffffff;
+    --border: rgba(0,0,0,0.12);
+    --border-hover: rgba(0,0,0,0.25);
+    --text-primary: #1a1a18;
+    --text-secondary: #5f5e5a;
+    --text-hint: #888780;
+    --green-fill: #E1F5EE;
+    --green-border: #1D9E75;
+    --green-text: #085041;
+    --red-fill: #FCEBEB;
+    --red-border: #E24B4A;
+    --red-text: #501313;
+    --accent: #1D9E75;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+  }
+
+  body {
+    font-family: -apple-system, 'Segoe UI', Arial, sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 2rem 1rem;
+    color: var(--text-primary);
+  }
+
+  .container {
+    width: 100%;
+    max-width: 560px;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .header h1 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .header p {
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  .meta-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 5px 12px;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  .badge span {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .progress-bar {
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  .question-card {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .q-num {
+    font-size: 12px;
+    color: var(--text-hint);
+    margin-bottom: 6px;
+  }
+
+  .q-text {
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 1.5;
+  }
+
+  .answers {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 1rem;
+  }
+
+  .answer-btn {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1rem;
+    font-size: 14px;
+    color: var(--text-primary);
+    cursor: pointer;
+    text-align: right;
+    width: 100%;
+    transition: background 0.15s, border-color 0.15s, transform 0.1s;
+    font-family: inherit;
+    line-height: 1.4;
+  }
+
+  .answer-btn:hover:not(:disabled) {
+    background: #f5f4f0;
+    border-color: var(--border-hover);
+  }
+
+  .answer-btn:active:not(:disabled) {
+    transform: scale(0.99);
+  }
+
+  .answer-btn.correct {
+    background: var(--green-fill);
+    border-color: var(--green-border);
+    color: var(--green-text);
+  }
+
+  .answer-btn.wrong {
+    background: var(--red-fill);
+    border-color: var(--red-border);
+    color: var(--red-text);
+  }
+
+  .answer-btn:disabled { cursor: default; }
+
+  .feedback {
+    display: none;
+    font-size: 13px;
+    padding: 0.7rem 1rem;
+    border-radius: var(--radius-md);
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+
+  .feedback.correct {
+    background: var(--green-fill);
+    color: var(--green-text);
+    border: 0.5px solid var(--green-border);
+  }
+
+  .feedback.wrong {
+    background: var(--red-fill);
+    color: var(--red-text);
+    border: 0.5px solid var(--red-border);
+  }
+
+  .next-btn {
+    display: none;
+    width: 100%;
+    padding: 0.75rem;
+    background: var(--surface);
+    border: 0.5px solid var(--border-hover);
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s;
+  }
+
+  .next-btn:hover { background: #f5f4f0; }
+
+  .result-screen {
+    display: none;
+    text-align: center;
+    padding: 2rem 0;
+  }
+
+  .result-emoji { font-size: 52px; margin-bottom: 1rem; }
+
+  .result-score {
+    font-size: 36px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .result-label {
+    font-size: 16px;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+  }
+
+  .result-msg {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1rem 1.25rem;
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+    text-align: right;
+  }
+
+  .restart-btn {
+    background: var(--surface);
+    border: 0.5px solid var(--border-hover);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 2.5rem;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s;
+  }
+
+  .restart-btn:hover { background: #ece9e0; }
+
+  @media (max-width: 480px) {
+    body { padding: 1rem 0.75rem; }
+    .q-text { font-size: 15px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div id="game-view">
+    <div class="header">
+      <h1>⚽ טריווה מונדיאל 2026</h1>
+      <p>כמה אתה יודע על המונדיאל הקרוב?</p>
+    </div>
+
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress"></div>
+    </div>
+
+    <div class="meta-row">
+      <div class="badge">ניקוד: <span id="score-display">0</span></div>
+      <div class="badge">שאלה <span id="q-counter">1</span> מתוך 10</div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-num" id="q-num"></div>
+      <div class="q-text" id="q-text"></div>
+    </div>
+
+    <div class="answers" id="answers"></div>
+    <div class="feedback" id="feedback"></div>
+    <button class="next-btn" id="next-btn">השאלה הבאה ←</button>
+  </div>
+
+  <div class="result-screen" id="result-screen">
+    <div class="result-emoji" id="result-emoji"></div>
+    <div class="result-score" id="result-score"></div>
+    <div class="result-label" id="result-label"></div>
+    <div class="result-msg" id="result-msg"></div>
+    <button class="restart-btn" onclick="startGame()">שחק שוב</button>
+  </div>
+</div>
+
+<script>
+const questions = [
+  {
+    q: "באילו שלוש מדינות יתקיים מונדיאל 2026?",
+    answers: ["ארה״ב, מקסיקו וקנדה", "ארה״ב, ברזיל ומקסיקו", "קנדה, ארגנטינה וארה״ב", "מקסיקו, ספרד וקנדה"],
+    correct: 0,
+    fact: "מונדיאל 2026 הוא הראשון שיתקיים בשלוש מדינות שונות – ארה״ב, מקסיקו וקנדה."
+  },
+  {
+    q: "כמה קבוצות ישתתפו במונדיאל 2026?",
+    answers: ["32 קבוצות", "48 קבוצות", "40 קבוצות", "36 קבוצות"],
+    correct: 1,
+    fact: "לראשונה בהיסטוריה, המונדיאל יתרחב ל-48 קבוצות משתתפות."
+  },
+  {
+    q: "איזו מדינה היא אלופת העולם הנוכחית (מונדיאל 2022)?",
+    answers: ["צרפת", "ברזיל", "ארגנטינה", "גרמניה"],
+    correct: 2,
+    fact: "ארגנטינה זכתה במונדיאל קטאר 2022 בגמר מול צרפת."
+  },
+  {
+    q: "כמה משחקים תשחק כל קבוצה בשלב הבתים?",
+    answers: ["3 משחקים", "4 משחקים", "2 משחקים", "5 משחקים"],
+    correct: 0,
+    fact: "שלב הבתים יכלול 12 בתים עם 4 קבוצות כל אחד – כל קבוצה תשחק 3 משחקים."
+  },
+  {
+    q: "איזה אצטדיון יארח את גמר מונדיאל 2026?",
+    answers: ["Rose Bowl, לוס אנג'לס", "MetLife Stadium, ניו ג'רסי", "Estadio Azteca, מקסיקו סיטי", "BC Place, ונקובר"],
+    correct: 1,
+    fact: "גמר המונדיאל יתקיים ב-MetLife Stadium בניו ג'רסי/ניו יורק."
+  },
+  {
+    q: "כמה פעמים זכתה ברזיל באליפות העולם בכדורגל?",
+    answers: ["4 פעמים", "6 פעמים", "5 פעמים", "3 פעמים"],
+    correct: 2,
+    fact: "ברזיל היא המדינה המצליחה ביותר בכדורגל עם 5 תארי אליפות עולם."
+  },
+  {
+    q: "מי הכדורגלן עם הכי הרבה שערים בהיסטוריית המונדיאל (עד 2022)?",
+    answers: ["ליונל מסי", "רונאלדו (ברזיל)", "מירוסלב קלוזה", "ז'וסט פונטן"],
+    correct: 2,
+    fact: "מירוסלב קלוזה מגרמניה הוא שיאן הבקעות במונדיאל עם 16 שערים."
+  },
+  {
+    q: "מתי צפוי להיפתח מונדיאל 2026?",
+    answers: ["יוני 2026", "מאי 2026", "יולי 2026", "אוגוסט 2026"],
+    correct: 0,
+    fact: "המונדיאל צפוי לנפתח ביוני 2026, עם המשחקים הראשונים בקנדה ובמקסיקו."
+  },
+  {
+    q: "כמה אצטדיונים יארחו משחקי מונדיאל 2026 בסך הכול?",
+    answers: ["16 אצטדיונים", "12 אצטדיונים", "20 אצטדיונים", "14 אצטדיונים"],
+    correct: 0,
+    fact: "16 עיר ו-16 אצטדיון יארחו משחקים – 11 בארה״ב, 3 במקסיקו ו-2 בקנדה."
+  },
+  {
+    q: "מה הכינוי של נבחרת ישראל בכדורגל?",
+    answers: ["האריות", "הצוברים", "הנשרים", "הכוכבים הכחולים"],
+    correct: 1,
+    fact: "נבחרת ישראל מכונה \"הצוברים\" – על שם הצמח הצבר, סמל של ישראלי ששורשיו בארץ."
+  }
+];
+
+let current = 0, score = 0, answered = false;
+
+function startGame() {
+  current = 0; score = 0; answered = false;
+  document.getElementById('game-view').style.display = 'block';
+  document.getElementById('result-screen').style.display = 'none';
+  showQuestion();
+}
+
+function showQuestion() {
+  answered = false;
+  const q = questions[current];
+  document.getElementById('q-num').textContent = 'שאלה ' + (current + 1);
+  document.getElementById('q-text').textContent = q.q;
+  document.getElementById('q-counter').textContent = current + 1;
+  document.getElementById('score-display').textContent = score;
+  document.getElementById('progress').style.width = ((current / questions.length) * 100) + '%';
+  document.getElementById('feedback').style.display = 'none';
+  document.getElementById('next-btn').style.display = 'none';
+
+  const container = document.getElementById('answers');
+  container.innerHTML = '';
+  q.answers.forEach(function(a, i) {
+    const btn = document.createElement('button');
+    btn.className = 'answer-btn';
+    btn.textContent = a;
+    btn.onclick = function() { pickAnswer(i); };
+    container.appendChild(btn);
+  });
+}
+
+function pickAnswer(idx) {
+  if (answered) return;
+  answered = true;
+  const q = questions[current];
+  const btns = document.querySelectorAll('.answer-btn');
+  btns.forEach(function(b) { b.disabled = true; });
+  btns[q.correct].classList.add('correct');
+
+  const fb = document.getElementById('feedback');
+  if (idx === q.correct) {
+    score++;
+    btns[idx].classList.add('correct');
+    fb.className = 'feedback correct';
+    fb.textContent = '✓ נכון! ' + q.fact;
+  } else {
+    btns[idx].classList.add('wrong');
+    fb.className = 'feedback wrong';
+    fb.textContent = '✗ לא נכון. ' + q.fact;
+  }
+  fb.style.display = 'block';
+  document.getElementById('score-display').textContent = score;
+
+  if (current < questions.length - 1) {
+    document.getElementById('next-btn').style.display = 'block';
+  } else {
+    setTimeout(showResult, 1600);
+  }
+}
+
+document.getElementById('next-btn').onclick = function() {
+  current++;
+  showQuestion();
+};
+
+function showResult() {
+  document.getElementById('game-view').style.display = 'none';
+  document.getElementById('result-screen').style.display = 'block';
+  document.getElementById('progress').style.width = '100%';
+
+  const pct = score / questions.length;
+  let emoji, label, msg;
+  if (pct === 1) {
+    emoji = '🏆'; label = 'מושלם!';
+    msg = 'ענית נכון על כל 10 השאלות! אתה מומחה אמיתי של מונדיאל 2026.';
+  } else if (pct >= 0.7) {
+    emoji = '⚽'; label = 'כל הכבוד!';
+    msg = 'תוצאה מצוינת! יש לך ידע טוב מאוד על המונדיאל הקרוב.';
+  } else if (pct >= 0.4) {
+    emoji = '😅'; label = 'לא רע!';
+    msg = 'תוצאה סבירה. כדאי לרענן את הידע לפני שהמונדיאל מתחיל ביוני!';
+  } else {
+    emoji = '📚'; label = 'יש לאן להתפתח';
+    msg = 'כדאי ללמוד קצת יותר על מונדיאל 2026 – הוא צפוי להיות מרהיב!';
+  }
+
+  document.getElementById('result-emoji').textContent = emoji;
+  document.getElementById('result-score').textContent = score + ' / ' + questions.length;
+  document.getElementById('result-label').textContent = label;
+  document.getElementById('result-msg').textContent = msg;
+}
+
+startGame();
+</script>
+</body>
+</html>
