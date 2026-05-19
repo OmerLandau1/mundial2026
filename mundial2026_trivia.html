@@ -260,6 +260,23 @@
 
   .restart-btn:hover { background: #EAF4F8; }
 
+  #locked-screen {
+    min-height: 70vh;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0;
+  }
+
+
+  .locked-thanks {
+    text-align: center;
+    margin-top: 4rem;
+  }
+
+
   @media (max-width: 480px) {
     body { padding: 1rem 0.75rem; }
     .q-text { font-size: 15px; }
@@ -292,7 +309,7 @@
 
     <div class="answers" id="answers"></div>
     <div class="feedback" id="feedback"></div>
-    <button class="next-btn" id="next-btn">השאלה הבאה ←</button>
+    <button class="next-btn" id="next-btn">שאלה הבאה</button>
   </div>
 
   <div class="result-screen" id="result-screen">
@@ -303,10 +320,8 @@
   </div>
 
   <div class="result-screen" id="locked-screen">
-    <div class="result-emoji">✅</div>
-    <div class="result-score">כבר עניתם על השאלון</div>
+    <div class="result-score">תודה על ההשתתפות!</div>
     <div class="result-label">ניתן לענות פעם אחת בלבד.</div>
-    <div class="result-msg">תודה על ההשתתפות!.</div>
   </div>
 </div>
 
@@ -381,7 +396,7 @@ function startGame() {
   if (localStorage.getItem(STORAGE_KEY) === 'true') {
     document.getElementById('game-view').style.display = 'none';
     document.getElementById('result-screen').style.display = 'none';
-    document.getElementById('locked-screen').style.display = 'block';
+    document.getElementById('locked-screen').style.display = 'flex';
     return;
   }
 
